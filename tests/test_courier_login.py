@@ -19,13 +19,6 @@ class CourierClient:
             "password": courier.password
         })
 
-
-@pytest.fixture(scope="module", autouse=True)
-def setup():
-    """Setting up before all tests"""
-    pass  # Можно добавить инициализацию, если нужно
-
-
 @allure.feature("Courier Login Tests")
 class TestCourierLogin:
 
@@ -33,16 +26,17 @@ class TestCourierLogin:
     @allure.description("Проверка авторизации курьера с корректным логином и паролем")
     def test_check_creating_courier_login(self):
         courier_client = CourierClient()
-        courier = Courier("Izumyshka", "12345", "izum")
+        courier = Courier("Dadic", "2169", "qwerty")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 200
         assert "id" in response.json()
+        print(response.status_code)
 
     @allure.title("Курьер авторизирован без логина")
     @allure.description("Проверка авторизации курьера без ввода логина")
     def test_check_verification_without_login_authorization(self):
         courier_client = CourierClient()
-        courier = Courier("", "12345", "izum")
+        courier = Courier("", "12345", "qwerty")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 400
         assert response.json()["message"] == "Недостаточно данных для входа"
@@ -51,7 +45,7 @@ class TestCourierLogin:
     @allure.description("Проверка авторизации курьера без ввода пароля")
     def test_check_verification_without_password_authorization(self):
         courier_client = CourierClient()
-        courier = Courier("Izum", "", "izum")
+        courier = Courier("Qwerty", "", "qwerty")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 400
         assert response.json()["message"] == "Недостаточно данных для входа"
@@ -60,7 +54,7 @@ class TestCourierLogin:
     @allure.description("Проверка авторизации курьера в системе под несуществующим пользователем")
     def test_check_authorization_under_incorrect_login(self):
         courier_client = CourierClient()
-        courier = Courier("we", "212506")
+        courier = Courier("QW", "159753")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 404
         assert response.json()["message"] == "Учетная запись не найдена"
@@ -69,7 +63,7 @@ class TestCourierLogin:
     @allure.description("Проверка авторизации курьера в системе, если неправильно указать логин")
     def test_check_entering_invalid_login(self):
         courier_client = CourierClient()
-        courier = Courier("ИзюмШпиц", "212506")
+        courier = Courier("Неделя", "159753")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 404
         assert response.json()["message"] == "Учетная запись не найдена"
@@ -78,7 +72,7 @@ class TestCourierLogin:
     @allure.description("Проверка авторизации курьера в системе, если неправильно указать пароль")
     def test_check_entering_invalid_password(self):
         courier_client = CourierClient()
-        courier = Courier("izym", "изюмушка")
+        courier = Courier("Qwerty", "qwerty")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 404
         assert response.json()["message"] == "Учетная запись не найдена"

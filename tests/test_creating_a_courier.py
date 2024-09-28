@@ -48,7 +48,7 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что нельзя создать двух одинаковых курьеров')
     def test_create_duplicate_courier(self):
-        login = "Alexlkhg"
+        login = "Alexlkgf"
         password = "2169"
         first_name = "dadic"
 
