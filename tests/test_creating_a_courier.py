@@ -1,9 +1,9 @@
-from config import BASE_URL
 import requests
 import random
 import string
 import allure
 
+BASE_URL = "https://qa-scooter.praktikum-services.ru"
 
 class Courier:
     def __init__(self, login, password, first_name=None):

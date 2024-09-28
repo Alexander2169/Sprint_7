@@ -1,8 +1,9 @@
 import requests
 from data import register_new_courier_and_return_login_password
-from config import BASE_URL
 import allure
 import pytest
+
+BASE_URL = "https://qa-scooter.praktikum-services.ru"
 
 class TestCourierLogin:
     def setup_method(self):

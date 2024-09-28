@@ -1,7 +1,8 @@
 import requests
 import random
 import string
-from config import BASE_URL
+
+BASE_URL = "https://qa-scooter.praktikum-services.ru"
 
 # метод регистрации нового курьера возвращает список из логина и пароля
 # если регистрация не удалась, возвращает пустой список

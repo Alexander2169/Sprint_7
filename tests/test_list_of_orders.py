@@ -1,6 +1,7 @@
-from config import BASE_URL
 import allure
 import requests
+
+BASE_URL = "https://qa-scooter.praktikum-services.ru"
 
 class TestGetOrders():
 

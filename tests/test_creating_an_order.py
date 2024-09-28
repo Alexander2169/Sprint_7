@@ -1,8 +1,8 @@
 import requests
 import pytest
 import allure
-from config import BASE_URL
 
+BASE_URL = "https://qa-scooter.praktikum-services.ru"
 
 class СreatingОrder:
     def __init__(self, first_name, last_name, address, subway_station, phone, rent_time, delivery_date, comment, color):
