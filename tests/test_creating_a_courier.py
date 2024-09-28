@@ -1,80 +1,94 @@
-import requests
-from data import register_new_courier_and_return_login_password
 from config import BASE_URL
+import requests
+import random
+import string
 import allure
 
 
-class TestCreatingCourier:
+class Courier:
+    def __init__(self, login, password, first_name=None):
+        self.login = login
+        self.password = password
+        self.first_name = first_name
 
-    def setup_method(self):
-
-        self.login_pass = register_new_courier_and_return_login_password()
-        self.payload = {
-            "login": self.login_pass[1],
-            "password": self.login_pass[1],
-            "firstName": self.login_pass[2]
+    def to_json(self):
+        return {
+            "login": self.login,
+            "password": self.password,
+            "firstName": self.first_name
         }
 
-    @allure.title('Проверяем, что курьера можно создать')
-    def test_courier_can_be_created(self):
 
-        response = requests.post(f"{BASE_URL}/api/v1/courier", json=self.payload)
+def generate_random_string(length):
+    letters = string.ascii_letters
+    return ''.join(random.choice(letters) for i in range(length))
+
+
+class TestCreatingCourier:
+    @allure.title('Проверяем, что можно создать курьера')
+    def test_create_courier(self):
+        login = generate_random_string(random.randint(2, 15))
+        password = generate_random_string(random.randint(7, 15))
+        first_name = generate_random_string(random.randint(2, 18))
+
+        courier = Courier(login, password, first_name)
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=courier.to_json())
         assert response.status_code == 201
-        assert response.json() == {"ok": True}
+        assert response.json().get("ok") is True
 
+    @allure.title('Проверяем, что можно создать курьера без имени')
+    def test_create_courier_without_first_name(self):
+        login = generate_random_string(random.randint(2, 15))
+        password = generate_random_string(random.randint(7, 15))
+
+        courier = Courier(login, password)
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=courier.to_json())
+        assert response.status_code == 201
+        assert response.json().get("ok") is True
 
     @allure.title('Проверяем, что нельзя создать двух одинаковых курьеров')
     def test_create_duplicate_courier(self):
+        login = "Alexpoi"
+        password = "2169"
+        first_name = "dadic"
 
-        response = requests.post(f"{BASE_URL}/api/v1/courier", json=self.payload)
+        # Создаем первого курьера
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=Courier(login, password, first_name).to_json())
+        assert response.status_code == 201
+
+        # Создаем второго курьера с тем же логином
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=Courier(login, "4567",
+                                                                            "qwerty").to_json())
         assert response.status_code == 409
-        assert response.json()["message"] == "Этот логин уже используется. Попробуйте другой."
-
+        assert "Этот логин уже используется. Попробуйте другой." in response.json().get("message")
 
     @allure.title('Проверяем, что если поле "Логин" не заполнено - запрос возвращает ошибку')
     def test_login_field_is_not_filled(self):
+        password = "5678"
+        first_name = "qwerty"
 
-        payload_without_login = {
-                "password": self.payload["password"],
-                "firstName": self.payload["firstName"]
-        }
-        response = requests.post(f"{BASE_URL}/api/v1/courier", json=payload_without_login)
+        courier = Courier("", password, first_name)
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=courier.to_json())
         assert response.status_code == 400
-        assert response.json()["message"] == "Недостаточно данных для создания учетной записи"
-
+        assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
+        print(response.json())
 
     @allure.title('Проверяем, что если поле "Пароль" не заполнено - запрос возвращает ошибку')
     def test_password_field_is_not_filled(self):
-        payload_without_password = {
-                "login": self.payload["login"],
-                "firstName": self.payload["firstName"]
-        }
-        response = requests.post(f"{BASE_URL}/api/v1/courier", json=payload_without_password)
+        login = "Fantomas"
+        first_name = "qwerty"
+
+        courier = Courier(login, "", first_name)
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=courier.to_json())
         assert response.status_code == 400
-        assert response.json()["message"] == "Недостаточно данных для создания учетной записи"
+        assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
 
-    @allure.title('Проверяем, что если создать пользователя с логином, который уже есть, возвращается ошибка')
-    def test_create_courier_with_existing_login(self):
+    @allure.title('Проверяем, что если полля "Логин" и "Пароль" не заполнены - запрос возвращает ошибку')
+    def test_login_and_password_field_is_not_filled(self):
+        first_name = "no_login_or_password"
 
-        requests.post(f"{BASE_URL}/api/v1/courier", json=self.payload)
-        response = requests.post(f"{BASE_URL}/api/v1/courier", json=self.payload)
-        assert response.status_code == 409
-        assert response.json()["message"] == "Этот логин уже используется. Попробуйте другой."
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        courier = Courier("", "", first_name)
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=courier.to_json())
+        assert response.status_code == 400
+        assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
+        print(response.json(), response.status_code)

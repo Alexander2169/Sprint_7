@@ -16,7 +16,7 @@ class СreatingОrder:
         self.comment = comment
         self.color = color
 
-    def to_dict(self):
+    def dictionary(self):
         return {
             "firstName": self.first_name,
             "lastName": self.last_name,
@@ -45,7 +45,7 @@ class СreatingОrder:
 @allure.title("Проверка создания заказа")
 @allure.description("Проверка создания заказа с различными данными")
 def test_create_order(creatingorder):
-    response = requests.post(f"{BASE_URL}/api/v1/orders", json=creatingorder.to_dict())
+    response = requests.post(f"{BASE_URL}/api/v1/orders", json=creatingorder.dictionary())
 
     assert response.status_code == 201
     response_json = response.json()

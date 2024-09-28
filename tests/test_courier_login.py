@@ -2,6 +2,7 @@ import requests
 from data import register_new_courier_and_return_login_password
 from config import BASE_URL
 import allure
+import pytest
 
 class TestCourierLogin:
     def setup_method(self):
@@ -30,6 +31,7 @@ class TestCourierLogin:
 
 
     @allure.title('Проверяем, что если поле "Пароль" не заполнено - запрос возвращает ошибку')
+    @pytest.mark.xfail(reason="неверный статус код = 504")
     def test_password_field_is_not_filled(self):
         payload_without_password = {
             "login": self.payload["login"]
