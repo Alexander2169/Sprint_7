@@ -9,5 +9,5 @@ class TestGetOrders():
         response = requests.get(f"{BASE_URL}/api/v1/orders")
         assert response.status_code == 200
         assert isinstance(response.json().get("orders"), list)
-        print(response.status_code, response.json())
+
 

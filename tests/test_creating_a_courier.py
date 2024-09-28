@@ -10,7 +10,7 @@ class TestCreatingCourier:
 
         self.login_pass = register_new_courier_and_return_login_password()
         self.payload = {
-            "login": self.login_pass[0],
+            "login": self.login_pass[1],
             "password": self.login_pass[1],
             "firstName": self.login_pass[2]
         }
