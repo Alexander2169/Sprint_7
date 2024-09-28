@@ -26,17 +26,17 @@ class TestCourierLogin:
     @allure.description("Проверка авторизации курьера с корректным логином и паролем")
     def test_check_creating_courier_login(self):
         courier_client = CourierClient()
-        courier = Courier("Dadic", "21695", "qwerty")
+        courier = Courier("Izumyshka", "12345", "izum")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 200
         assert "id" in response.json()
-        print(response.status_code)
+
 
     @allure.title("Курьер авторизирован без логина")
     @allure.description("Проверка авторизации курьера без ввода логина")
     def test_check_verification_without_login_authorization(self):
         courier_client = CourierClient()
-        courier = Courier("", "12345", "qwerty")
+        courier = Courier("", "12345", "qwer")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 400
         assert response.json()["message"] == "Недостаточно данных для входа"
