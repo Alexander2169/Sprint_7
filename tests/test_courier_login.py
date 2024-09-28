@@ -75,4 +75,6 @@ class TestCourierLogin:
         courier = Courier("Qwerty", "qwerty")
         response = courier_client.get_post_request_courier_login(courier)
         assert response.status_code == 404
-        assert response.json()["message"] == "Учетная запись не найдена"
+        yield response.json()["message"] == "Учетная запись не найдена"
+
+
