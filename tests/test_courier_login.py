@@ -11,7 +11,6 @@ class TestCourierLogin:
             "login": self.login_pass[0],
             "password": self.login_pass[1]
         }
-
     @allure.title('Проверяем, что курьер может авторизоваться, переданы все обязательные поля')
     def test_login_courier(self):
 
@@ -19,8 +18,8 @@ class TestCourierLogin:
         assert response.status_code == 200
         assert "id" in response.json()
 
-    @allure.title('Проверяем, что если какого-то поля нет, запрос возвращает ошибку')
-    def test_without_login_and_password(self):
+    @allure.title('Проверяем, что если поле "Логин" не заполнено - запрос возвращает ошибку')
+    def test_login_field_is_not_filled(self):
         payload_without_login = {
             "password": self.payload["password"]
         }
@@ -28,6 +27,8 @@ class TestCourierLogin:
         assert response.status_code == 400
         assert response.json()["message"] == "Недостаточно данных для входа"
 
+    @allure.title('Проверяем, что если поле "Пароль" не заполнено - запрос возвращает ошибку')
+    def test_password_field_is_not_filled(self):
         payload_without_password = {
             "login": self.payload["login"]
         }

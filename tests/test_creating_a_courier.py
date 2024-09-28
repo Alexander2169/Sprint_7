@@ -16,21 +16,26 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что курьера можно создать')
     def test_courier_can_be_created(self):
-
-        response = requests.post(f"{BASE_URL}/api/v1/courier", json=self.payload)
+        payload = {
+            "login": "QASDC",
+            "password": "1234",
+            "firstName": "first_name"
+        }
+        response = requests.post(f"{BASE_URL}/api/v1/courier", json=payload)
         assert response.status_code == 201
         assert response.json() == {"ok": True}
+
 
     @allure.title('Проверяем, что нельзя создать двух одинаковых курьеров')
     def test_create_duplicate_courier(self):
 
-        requests.post(BASE_URL, json=self.payload)
         response = requests.post(f"{BASE_URL}/api/v1/courier", json=self.payload)
         assert response.status_code == 409
         assert response.json()["message"] == "Этот логин уже используется. Попробуйте другой."
 
-    @allure.title('Проверяем, что если одного из полей нет, запрос возвращает ошибку')
-    def test_create_courier_with_missing_field(self):
+
+    @allure.title('Проверяем, что если поле "Логин" не заполнено - запрос возвращает ошибку')
+    def test_login_field_is_not_filled(self):
 
         payload_without_login = {
                 "password": self.payload["password"],
@@ -40,6 +45,8 @@ class TestCreatingCourier:
         assert response.status_code == 400
         assert response.json()["message"] == "Недостаточно данных для создания учетной записи"
 
+    @allure.title('Проверяем, что если поле "Пароль" не заполнено - запрос возвращает ошибку')
+    def test_password_field_is_not_filled(self):
         payload_without_password = {
                 "login": self.payload["login"],
                 "firstName": self.payload["firstName"]
@@ -47,6 +54,7 @@ class TestCreatingCourier:
         response = requests.post(f"{BASE_URL}/api/v1/courier", json=payload_without_password)
         assert response.status_code == 400
         assert response.json()["message"] == "Недостаточно данных для создания учетной записи"
+
 
     @allure.title('Проверяем, что если создать пользователя с логином, который уже есть, возвращается ошибка')
     def test_create_courier_with_existing_login(self):
@@ -56,10 +64,12 @@ class TestCreatingCourier:
         assert response.status_code == 409
         assert response.json()["message"] == "Этот логин уже используется. Попробуйте другой."
 
-    def teardown_method(self):
 
+    def teardown_method(self):
         requests.delete(f"{BASE_URL}/api/v1/courier",
                     json={"login": self.payload["login"], "password": self.payload["password"]})
+
+
 
 
 

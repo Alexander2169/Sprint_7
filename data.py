@@ -38,3 +38,5 @@ def register_new_courier_and_return_login_password():
 
     # возвращаем список
     return login_pass
+
+
