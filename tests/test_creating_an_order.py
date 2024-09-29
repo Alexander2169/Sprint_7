@@ -1,4 +1,3 @@
-import requests
 import pytest
 import allure
 from api_actions import CreatingOrder
