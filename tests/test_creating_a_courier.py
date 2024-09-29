@@ -2,7 +2,7 @@ import random
 import allure
 from api_actions import CourierCreating, ClientCreating
 from helpers import generate_random_string
-from data import test_data
+from data import *
 
 class TestCreatingCourier:
 
@@ -40,7 +40,7 @@ class TestCreatingCourier:
         # Создаем второго курьера с тем же логином
         response = ClientCreating.create_courier(CourierCreating(login, "4567", "qwerty"))
         assert response.status_code == 409
-        assert "Этот логин уже используется. Попробуйте другой." in response.json().get("message")
+        assert DUBLICATE_LOGIN in response.json().get("message")
 
     @allure.title('Проверяем, что если поле "Логин" не заполнено - запрос возвращает ошибку')
     def test_login_field_is_not_filled(self):
@@ -50,7 +50,7 @@ class TestCreatingCourier:
         courier = CourierCreating("", password, first_name)
         response = ClientCreating.create_courier(courier)
         assert response.status_code == 400
-        assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
+        assert response.json().get("message") == MISSING_DATA
 
     @allure.title('Проверяем, что если поле "Пароль" не заполнено - запрос возвращает ошибку')
     def test_password_field_is_not_filled(self):
@@ -60,7 +60,7 @@ class TestCreatingCourier:
         courier = CourierCreating(login, "", first_name)
         response = ClientCreating.create_courier(courier)
         assert response.status_code == 400
-        assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
+        assert response.json().get("message") == MISSING_DATA
 
     @allure.title('Проверяем, что если поле "Логин" и "Пароль" не заполнены - запрос возвращает ошибку')
     def test_login_and_password_field_is_not_filled(self):
@@ -69,6 +69,6 @@ class TestCreatingCourier:
         courier = CourierCreating("", "", first_name)
         response = ClientCreating.create_courier(courier)
         assert response.status_code == 400
-        assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
+        assert response.json().get("message") == MISSING_DATA
 
 
