@@ -1,9 +1,9 @@
 import allure
 import requests
+from config import BASE_URL
 
-BASE_URL = "https://qa-scooter.praktikum-services.ru"
 
-class TestGetOrders():
+class TestListOrders():
 
     @allure.title('Проверяем, что в тело ответа возвращается список заказов')
     def test_get_orders_list(self):

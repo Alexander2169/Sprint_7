@@ -2,8 +2,7 @@ import requests
 import random
 import string
 import allure
-
-BASE_URL = "https://qa-scooter.praktikum-services.ru"
+from config import BASE_URL
 
 class Courier:
     def __init__(self, login, password, first_name=None):
@@ -48,7 +47,7 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что нельзя создать двух одинаковых курьеров')
     def test_create_duplicate_courier(self):
-        login = "Aleksadr"
+        login = "Aleksadу"
         password = "2169"
         first_name = "dadic"
 

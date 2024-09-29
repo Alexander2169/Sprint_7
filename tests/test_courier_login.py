@@ -1,6 +1,6 @@
 import requests
 import allure
-
+from config import BASE_URL
 class Courier:
     def __init__(self, login: str, password: str, first_name: str = None):
         self.login = login
@@ -9,11 +9,10 @@ class Courier:
 
 
 class CourierClient:
-    BASE_URL = "http://qa-scooter.praktikum-services.ru"
 
     @staticmethod
     def get_post_request_courier_login(courier: Courier):
-        return requests.post(f"{CourierClient.BASE_URL}/api/v1/courier/login", json={
+        return requests.post(f"{BASE_URL}/api/v1/courier/login", json={
             "login": courier.login,
             "password": courier.password
         })
