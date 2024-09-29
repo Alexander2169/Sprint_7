@@ -3,7 +3,7 @@ import random
 import string
 import allure
 from config import BASE_URL
-
+from helpers import generate_random_string
 class Courier:
     def __init__(self, login, password, first_name=None):
         self.login = login
@@ -16,12 +16,6 @@ class Courier:
             "password": self.password,
             "firstName": self.first_name
         }
-
-
-def generate_random_string(length):
-    letters = string.ascii_letters
-    return ''.join(random.choice(letters) for i in range(length))
-
 
 class TestCreatingCourier:
     @allure.title('Проверяем, что можно создать курьера')
@@ -47,7 +41,7 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что нельзя создать двух одинаковых курьеров')
     def test_create_duplicate_courier(self):
-        login = "Aleksadу"
+        login = "Aleksadc"
         password = "2169"
         first_name = "dadic"
 
