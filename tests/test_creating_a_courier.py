@@ -2,6 +2,7 @@ import random
 import allure
 from api_actions import CourierCreating, ClientCreating
 from helpers import generate_random_string
+from data import test_data
 
 class TestCreatingCourier:
 
@@ -28,9 +29,9 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что нельзя создать двух одинаковых курьеров')
     def test_create_duplicate_courier(self):
-        login = "Aleksads"
-        password = "2169"
-        first_name = "dadic"
+        login = test_data["valid_courier"]["login"]
+        password = test_data["valid_courier"]["password"]
+        first_name = test_data["valid_courier"]["first_name"]
 
         # Создаем первого курьера
         response = ClientCreating.create_courier(CourierCreating(login, password, first_name))
@@ -43,8 +44,8 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что если поле "Логин" не заполнено - запрос возвращает ошибку')
     def test_login_field_is_not_filled(self):
-        password = "5678"
-        first_name = "qwerty"
+        password = test_data["empty_login"]["password"]
+        first_name = test_data["empty_login"]["first_name"]
 
         courier = CourierCreating("", password, first_name)
         response = ClientCreating.create_courier(courier)
@@ -53,8 +54,8 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что если поле "Пароль" не заполнено - запрос возвращает ошибку')
     def test_password_field_is_not_filled(self):
-        login = "Fantomas"
-        first_name = "qwerty"
+        login = test_data["empty_password"]["login"]
+        first_name = test_data["empty_password"]["first_name"]
 
         courier = CourierCreating(login, "", first_name)
         response = ClientCreating.create_courier(courier)
@@ -63,12 +64,11 @@ class TestCreatingCourier:
 
     @allure.title('Проверяем, что если поле "Логин" и "Пароль" не заполнены - запрос возвращает ошибку')
     def test_login_and_password_field_is_not_filled(self):
-        first_name = "no_login_or_password"
+        first_name = test_data["empty_both"]["first_name"]
 
         courier = CourierCreating("", "", first_name)
         response = ClientCreating.create_courier(courier)
         assert response.status_code == 400
         assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
-
 
 
