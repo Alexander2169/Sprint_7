@@ -16,3 +16,7 @@ test_data = {
         "first_name": "no_login_or_password"
     }
 }
+
+LOGIN_REQUIRED_MESSAGE = "Недостаточно данных для входа"
+ACCOUNT_NOT_FOUND_MESSAGE = "Учетная запись не найдена"
+INSUFFICIENT_DATA_MESSAGE = "Недостаточно данных для создания учетной записи"

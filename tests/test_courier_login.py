@@ -1,5 +1,6 @@
 import allure
 from api_actions import CourierLogin, ClientLogin
+from data import LOGIN_REQUIRED_MESSAGE, ACCOUNT_NOT_FOUND_MESSAGE
 
 class TestCourierLogin:
 
@@ -17,7 +18,7 @@ class TestCourierLogin:
         courier = CourierLogin("", "12345", "qwer")
         response = ClientLogin.get_post_request_courier_login(courier)
         assert response.status_code == 400
-        assert response.json()["message"] == "Недостаточно данных для входа"
+        assert response.json()["message"] == LOGIN_REQUIRED_MESSAGE
 
     @allure.title("Курьер авторизирован без пароля")
     @allure.description("Проверка авторизации курьера без ввода пароля")
@@ -25,7 +26,7 @@ class TestCourierLogin:
         courier = CourierLogin("Qwerty", "", "qwerty")
         response = ClientLogin.get_post_request_courier_login(courier)
         assert response.status_code == 400
-        assert response.json()["message"] == "Недостаточно данных для входа"
+        assert response.json()["message"] == LOGIN_REQUIRED_MESSAGE
 
     @allure.title("Курьер авторизирован под несуществующим логином")
     @allure.description("Проверка авторизации курьера в системе под несуществующим пользователем")
@@ -33,7 +34,7 @@ class TestCourierLogin:
         courier = CourierLogin("QW", "159753")
         response = ClientLogin.get_post_request_courier_login(courier)
         assert response.status_code == 404
-        assert response.json()["message"] == "Учетная запись не найдена"
+        assert response.json()["message"] == ACCOUNT_NOT_FOUND_MESSAGE
 
     @allure.title("Курьер авторизирован под некорректным логином")
     @allure.description("Проверка авторизации курьера в системе, если неправильно указать логин")
@@ -41,7 +42,7 @@ class TestCourierLogin:
         courier = CourierLogin("Неделя", "159753")
         response = ClientLogin.get_post_request_courier_login(courier)
         assert response.status_code == 404
-        assert response.json()["message"] == "Учетная запись не найдена"
+        assert response.json()["message"] == ACCOUNT_NOT_FOUND_MESSAGE
 
     @allure.title("Курьер авторизирован под некорректным паролем")
     @allure.description("Проверка авторизации курьера в системе, если неправильно указать пароль")
@@ -49,5 +50,6 @@ class TestCourierLogin:
         courier = CourierLogin("Qwerty", "qwerty")
         response = ClientLogin.get_post_request_courier_login(courier)
         assert response.status_code == 404
-        assert response.json()["message"] == "Учетная запись не найдена"
+        assert response.json()["message"] == ACCOUNT_NOT_FOUND_MESSAGE
+
 
