@@ -70,7 +70,7 @@ class TestCreatingCourier:
         response = requests.post(f"{BASE_URL}/api/v1/courier", json=courier.to_json())
         assert response.status_code == 400
         assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
-        print(response.json())
+
 
     @allure.title('Проверяем, что если поле "Пароль" не заполнено - запрос возвращает ошибку')
     def test_password_field_is_not_filled(self):
@@ -90,4 +90,4 @@ class TestCreatingCourier:
         response = requests.post(f"{BASE_URL}/api/v1/courier", json=courier.to_json())
         assert response.status_code == 400
         assert response.json().get("message") == "Недостаточно данных для создания учетной записи"
-        print(response.json(), response.status_code)
+
