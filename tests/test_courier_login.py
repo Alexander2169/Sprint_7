@@ -1,7 +1,6 @@
 import allure
 from api_actions import CourierLogin, ClientLogin
 
-@allure.feature("Courier Login Tests")
 class TestCourierLogin:
 
     @allure.title("Курьер авторизирован")
