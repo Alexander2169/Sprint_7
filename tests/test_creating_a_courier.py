@@ -1,9 +1,11 @@
 import requests
 import random
-import string
 import allure
 from config import BASE_URL
 from helpers import generate_random_string
+from api_actions import Courier, CourierClient
+
+
 class Courier:
     def __init__(self, login, password, first_name=None):
         self.login = login

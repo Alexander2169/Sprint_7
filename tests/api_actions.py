@@ -7,7 +7,7 @@ class Courier:
         self.password = password
         self.first_name = first_name
 
-class CourierClient:
+class Client:
     @staticmethod
     def get_post_request_courier_login(courier: Courier):
         return requests.post(f"{BASE_URL}/api/v1/courier/login", json={
