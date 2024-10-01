@@ -1,6 +1,6 @@
 import allure
 import requests
-from config import BASE_URL
+from api_actions import *
 
 
 class TestListOrders():
