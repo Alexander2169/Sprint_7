@@ -1,6 +1,6 @@
 test_data = {
     "valid_courier": {
-        "login": "ShuRiKs",
+        "login": "Aleksanders",
         "password": "2169",
         "first_name": "dadic"
     },
